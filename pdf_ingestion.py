@@ -1,3 +1,4 @@
+import subprocess
 import tabula
 import pdf2image
 import layoutparser as lp
@@ -5,6 +6,14 @@ import numpy as np
 import pandas as pd
 import fitz
 import re
+
+def is_scanned_pdf(pdf_path):
+    with fitz.open(pdf_path) as doc:
+        for page in doc:
+            if page.get_text():
+                return False
+    return True
+
 
 def scale_xy(textblock, scale=72/200):
     x_1 = textblock.block.x_1 * scale - 15
@@ -18,8 +27,18 @@ def processing_text(text):
     text = ' '.join(listText)
     return text
 
+
+def apply_ocr_to_pdf(pdf_path, output_path=None):
+    """
+    Applica OCR a un PDF scannerizzato usando ocrmypdf.
+    """
+    if output_path is None:
+        output_path = pdf_path  # Sovrascrive il file originale se non viene specificato un percorso di output
+    subprocess.run(['ocrmypdf', pdf_path, output_path], check=True)
+
+
 def replace_tables_in_text(pdf_path):
-    doc_fitz = fitz.open(pdf_path)
+    
     text_chunks = []
 
     model = lp.models.Detectron2LayoutModel(
@@ -28,8 +47,15 @@ def replace_tables_in_text(pdf_path):
         label_map={0: "Table"},
         extra_config=["MODEL.ROI_HEADS.SCORE_THRESH_TEST", 0.8]
     )
-
+    
     doc = pdf2image.convert_from_path(pdf_path)
+
+    if is_scanned_pdf(pdf_path):
+        print(f"PDF scannerizzato rilevato. Applicazione di OCR a: {pdf_path}")
+        apply_ocr_to_pdf(pdf_path)
+        print("OCR completato.")
+    
+    doc_fitz = fitz.open(pdf_path)
 
     for page_num, document in enumerate(doc_fitz):
         img = np.asarray(doc[page_num])
@@ -38,6 +64,7 @@ def replace_tables_in_text(pdf_path):
         accumulated_text = ""
         previous_bottom = 0
         page = doc_fitz[page_num]
+        
 
         if detected:
             detected.sort(key=lambda x: x.block.y_1)  # Ordina le tabelle per la coordinata y
@@ -68,6 +95,7 @@ def replace_tables_in_text(pdf_path):
             # Nessuna tabella rilevata, usa tutto il testo della pagina
             accumulated_text = processing_text(page.get_text('text'))
 
+        
         text_chunks.append(accumulated_text)
 
     return text_chunks
