@@ -65,27 +65,32 @@ def replace_tables_in_text(pdf_path):
         previous_bottom = 0
         page = doc_fitz[page_num]
         
-
+        print(page_num+1)
         if detected:
             detected.sort(key=lambda x: x.block.y_1)  # Ordina le tabelle per la coordinata y
 
             for i, table in enumerate(detected):
                 new_coordinates = scale_xy(table)
                 area = [new_coordinates[0], new_coordinates[1], new_coordinates[2], new_coordinates[3]]
-                tables = tabula.read_pdf(pdf_path, pages=page_num + 1, area=area, multiple_tables=False)
-                if not tables:
-                    continue
-                
-                md_table = tables[0].dropna(axis=1, how='all').fillna('')
-                md_table = md_table.to_markdown(index=False)
+                try:
+                    tables = tabula.read_pdf(pdf_path, pages=page_num + 1, area=area, multiple_tables=False)
+                    if tables:
+                        md_table = tables[0].dropna(axis=1, how='all').fillna('')
+                        md_table = md_table.to_markdown(index=False)
+                        md_table = processing_text(md_table)
+                        table_text = f' <start_table{i+1}>' + md_table + f' <end_table{i+1}>'
+                    else:
+                        table_text = ''
+                except Exception as e:
+                    print(f"Errore nell'estrazione della tabella: {e}. Procedo con l'estrazione solo del testo.")
+                    table_text = ''
 
                 top, bottom = new_coordinates[0], new_coordinates[2]
-                
                 text_before = page.get_text("text", clip=fitz.Rect(0, previous_bottom, page.rect.width, top))
                 text_before = processing_text(text_before)
-                previous_bottom = bottom  # Aggiorna il testo finale per il prossimo for
+                previous_bottom = bottom
 
-                accumulated_text += text_before + f' <start_table{i+1}>' + md_table + f' <end_table{i+1}>'
+                accumulated_text += text_before + table_text
 
             # Aggiungi il testo dopo l'ultima tabella
             text_after = page.get_text("text", clip=fitz.Rect(0, previous_bottom, page.rect.width, page.rect.height))
