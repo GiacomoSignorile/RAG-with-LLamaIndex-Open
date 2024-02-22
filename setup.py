@@ -1,15 +1,9 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="my_package",
-    version="0.1",
+    name='pdf_ingestion',
+    version='0.1',
+    author='Giacomo Signorile',
     packages=find_packages(),
-    install_requires=[
-        # Elenco di tutte le dipendenze dal tuo requirements.txt
-    ],
-    entry_points={
-        'console_scripts': [
-            'pdf_processor=pdf_processor.pdf_processor:main',  # Adatta questa riga al tuo codice
-        ],
-    },
+    python_requires='>=3.9',
 )
