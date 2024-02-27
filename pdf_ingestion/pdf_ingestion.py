@@ -7,6 +7,13 @@ import pandas as pd
 import fitz
 import re
 
+model = lp.models.Detectron2LayoutModel(
+        config_path='./Docs/config2.yaml',
+        model_path='./models/TableBank-faster_rcnn_R_101_FPN_3x-model.pth',
+        label_map={0: "Table"},
+        extra_config=["MODEL.ROI_HEADS.SCORE_THRESH_TEST", 0.8]
+    )
+
 def is_scanned_pdf(pdf_path):
     with fitz.open(pdf_path) as doc:
         for page in doc:
@@ -40,13 +47,6 @@ def apply_ocr_to_pdf(pdf_path, output_path=None):
 def replace_tables_in_text(pdf_path):
     
     text_chunks = []
-
-    model = lp.models.Detectron2LayoutModel(
-        config_path='./Docs/config2.yaml',
-        model_path='./models/TableBank-faster_rcnn_R_101_FPN_3x-model.pth',
-        label_map={0: "Table"},
-        extra_config=["MODEL.ROI_HEADS.SCORE_THRESH_TEST", 0.8]
-    )
     
     doc = pdf2image.convert_from_path(pdf_path)
 
