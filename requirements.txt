@@ -14,7 +14,10 @@ pymupdf
 tabula-py
 img2table
 llama-index
+llama-index-core
+llama-parse
 bitsandbytes
 llama-cpp-python
 transformers
 scikit-learn
+chromadb
