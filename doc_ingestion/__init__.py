@@ -5,8 +5,8 @@
 # from .chunk_splitter import get_documents
 from . import chunk_splitter
 from . import pdf_ingestion
+from . import extract_layout
 
 
-
-__all__ = ['chunk_splitter', 'pdf_ingestion']
+__all__ = ['chunk_splitter', 'pdf_ingestion','extract_layout']
 

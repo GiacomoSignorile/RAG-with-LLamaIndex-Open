@@ -55,34 +55,33 @@ def custom_chunker(text, max_length=1024):
     
     return text_chunks
 
-def get_documents(path = '.\Docs', max_len = 1024):
-    '''
-    carica i documenti pdf nei chunks e dopo li splitta e ritorna una struttura documents
-    contente una lista di Document con text i chunk splittati
 
+
+def get_documents(path='./Docs', max_len=1024):
+    '''
+    Loads PDF documents into chunks, splits them, and returns a structure containing a list
+    of Documents with the chunked text.
     '''
     folder_path = path
     pdf_files = [f for f in os.listdir(folder_path) if f.endswith('.pdf')]
 
-    chunks = []
+    documents = []
+    tables = []
 
     for pdf_file in pdf_files:
         full_path = os.path.join(folder_path, pdf_file)
         print(pdf_file)
-        text = pdf_ingestion.replace_tables_in_text(full_path)
-        chunks.append(text)
-
-    chunks_splitted = []
-
-    for chunk in chunks:
-        for text in chunk:
-            print(f'text unsplitted : {text}')
+        texts, md_tables = pdf_ingestion.replace_tables_in_text(full_path)
+        
+        for text in texts:
             chunk_splitted = custom_chunker(text, max_length=max_len)
             print(len(chunk_splitted))
             if len(chunk_splitted) > 1:
-                print(f'lenght : {len(chunk_splitted[0])} text splitted : {chunk_splitted}')
-            chunks_splitted.extend(chunk_splitted)
+                print(f'length : {len(chunk_splitted[0])} text splitted : {chunk_splitted}')
+            
+            for chunk in chunk_splitted:
+                documents.append(Document(text=chunk, metadata={'source': pdf_file}))
+            
+        tables.append(md_tables)
 
-
-    documents = [Document(text=text) for text in chunks_splitted]
-    return documents
+    return documents, tables

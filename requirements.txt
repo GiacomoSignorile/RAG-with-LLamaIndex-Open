@@ -15,6 +15,7 @@ tabula-py
 img2table
 llama-index
 llama-index-core
+llama-index-embeddings-huggingface
 llama-parse
 bitsandbytes
 llama-cpp-python

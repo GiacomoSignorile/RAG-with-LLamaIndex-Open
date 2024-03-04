@@ -5,11 +5,12 @@ import layoutparser as lp
 import numpy as np
 import pandas as pd
 import fitz
+from .extract_layout import ExtractLayout
 import re
 
-model = lp.models.Detectron2LayoutModel(
-        config_path='./Docs/config2.yaml',
-        model_path='./models/TableBank-faster_rcnn_R_101_FPN_3x-model.pth',
+model =  ExtractLayout(
+        config_path='lp://TableBank/faster_rcnn_R_101_FPN_3x/config',
+        # model_path='./models/TableBank-faster_rcnn_R_101_FPN_3x-model.pth',
         label_map={0: "Table"},
         extra_config=["MODEL.ROI_HEADS.SCORE_THRESH_TEST", 0.8]
     )
@@ -46,6 +47,7 @@ def apply_ocr_to_pdf(pdf_path, output_path=None):
 
 def replace_tables_in_text(pdf_path):
     
+    md_tables = []
     text_chunks = []
     
     doc = pdf2image.convert_from_path(pdf_path)
@@ -73,10 +75,11 @@ def replace_tables_in_text(pdf_path):
                 new_coordinates = scale_xy(table)
                 area = [new_coordinates[0], new_coordinates[1], new_coordinates[2], new_coordinates[3]]
                 try:
-                    tables = tabula.read_pdf(pdf_path, pages=page_num + 1, area=area, multiple_tables=False, stream=True)
+                    tables = tabula.read_pdf(pdf_path, pages=page_num + 1, area=area, multiple_tables=False)
                     if tables:
                         md_table = tables[0].dropna(axis=1, how='all').fillna('')
                         md_table = md_table.to_markdown(index=False)
+                        md_tables.append(md_table)
                         md_table = processing_text(md_table)
                         table_text = f' <start_table{i+1}>' + md_table + f' <end_table{i+1}>'
                     else:
@@ -98,9 +101,10 @@ def replace_tables_in_text(pdf_path):
             accumulated_text += text_after
         else:
             # Nessuna tabella rilevata, usa tutto il testo della pagina
+            print('no tables')
             accumulated_text = processing_text(page.get_text('text'))
 
         
         text_chunks.append(accumulated_text)
 
-    return text_chunks
+    return text_chunks,md_tables
