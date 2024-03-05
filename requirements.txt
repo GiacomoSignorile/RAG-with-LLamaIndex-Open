@@ -16,6 +16,7 @@ img2table
 llama-index
 llama-index-core
 llama-index-embeddings-huggingface
+llama-index-postprocessor-flag-embedding-reranker
 llama-parse
 bitsandbytes
 llama-cpp-python

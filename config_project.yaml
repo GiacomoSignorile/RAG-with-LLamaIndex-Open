@@ -1,0 +1,34 @@
+custom_splitter:
+  chunk_size: 1024
+
+pdf_ingestion:
+  path: './Docs'
+
+
+similarity_metrics:
+  - cosine
+  - jaccard
+  - euclidean
+
+table_extraction:
+  method: tabula
+  parameters:
+    flavor: lattice
+    strip_text: "\n"
+    
+filters:
+  file_size:
+    min: 100
+    max: 5000
+
+  file_type:
+    - pdf
+    - docx
+
+RetrievalQA:
+  k: 3
+
+vector_store:
+  type: AstraDB
+  parameters:
+    index_type: 
