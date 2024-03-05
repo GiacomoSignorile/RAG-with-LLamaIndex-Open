@@ -1,4 +1,7 @@
 .venv
 py310
+__pycache__
+model
+
 
 
