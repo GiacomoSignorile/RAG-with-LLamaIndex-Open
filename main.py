@@ -1,5 +1,5 @@
 import yaml
-from doc_ingestion import chunk_splitter, pdf_ingestion, extract_layout
+from rag_open_source import chunk_splitter, pdf_ingestion, extract_layout
 
 def main(config_path):
     
@@ -11,10 +11,7 @@ def main(config_path):
 
     for pdf_file in pdf_files:
         
-        layout = extract_layout.extract(pdf_file, config['layout_extraction_settings'])
-        
-        
-        chunks = chunk_splitter.split(layout, config['chunk_splitter_settings'])
+        chunks = chunk_splitter.split(config['chunk_splitter_settings'])
         
         
 if __name__ == "__main__":
