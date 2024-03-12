@@ -20,6 +20,8 @@ llama-index-postprocessor-flag-embedding-reranker
 llama-index-vector-stores-pinecone
 llama-index-vector-stores-chroma
 llama-index-vector-stores-astra_db
+llama-index-vector-stores-mongodb
+llama-index-callbacks-langfuse
 llama-index-llms-llama_cpp
 pinecone-client
 llama-parse
@@ -28,3 +30,4 @@ llama-cpp-python
 transformers
 scikit-learn
 chromadb
+wheel

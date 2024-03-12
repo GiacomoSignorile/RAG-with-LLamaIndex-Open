@@ -1,6 +1,6 @@
 from llama_index.llms.llama_cpp import LlamaCPP
 
-def getLlamaLLM(model_path,model_url, temperature):
+def getLlamaLLM(model_path,model_url, temperature=0.1):
     llm = LlamaCPP(
     # You can pass in the URL to a GGML model to download it automatically
     model_url=model_url,

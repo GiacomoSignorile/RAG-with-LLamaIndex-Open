@@ -2,6 +2,12 @@
 py310
 __pycache__
 model
+.env
+build 
+dist
+VectorStore
+
+
 
 
 

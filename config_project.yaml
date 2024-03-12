@@ -1,9 +1,15 @@
 custom_splitter:
+  path:
+  - './testdoc'
   chunk_size: 1024
 
 pdf_ingestion:
-  path: './Docs'
+  path: 
+  - './testdoc'
 
+embeddings:
+  name: 
+  - "nickprock/sentence-bert-base-italian-uncased"
 
 similarity_metrics:
   - cosine
@@ -25,10 +31,9 @@ filters:
     - pdf
     - docx
 
-RetrievalQA:
-  k: 3
 
 vector_store:
-  type: AstraDB
-  parameters:
-    index_type: 
+  path:
+  -  "./VectorStore"
+  name:
+  -  "test1_collection" 
