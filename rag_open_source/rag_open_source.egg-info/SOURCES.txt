@@ -1,0 +1,7 @@
+README.md
+setup.py
+rag_open_source/rag_open_source.egg-info/PKG-INFO
+rag_open_source/rag_open_source.egg-info/SOURCES.txt
+rag_open_source/rag_open_source.egg-info/dependency_links.txt
+rag_open_source/rag_open_source.egg-info/entry_points.txt
+rag_open_source/rag_open_source.egg-info/top_level.txt
