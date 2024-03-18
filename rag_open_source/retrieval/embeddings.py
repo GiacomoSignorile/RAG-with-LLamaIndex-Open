@@ -5,8 +5,8 @@ from llama_index.core.node_parser import MarkdownElementNodeParser
 import nest_asyncio
 nest_asyncio.apply()
 
-def getEmbeddingModel(name = "nickprock/sentence-bert-base-italian-uncased"):
-    embed_model = HuggingFaceEmbedding(model_name=name)
+def getEmbeddingModel(name = "nickprock/sentence-bert-base-italian-uncased", max_len = 512):
+    embed_model = HuggingFaceEmbedding(model_name=name, max_length= max_len)
     return embed_model
 
 def createEmbeddings(documents, embed_model):

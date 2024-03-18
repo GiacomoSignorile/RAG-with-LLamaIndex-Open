@@ -8,10 +8,9 @@ setup(
     python_requires='>=3.9',
     packages=find_packages('rag_open_source'),
     package_dir={'': 'rag_open_source'},
-    python_requires='>=3.9',
     entry_points={
         "console_scripts": [
-            "llm_demo = llm_demo.main.dashboard:main"
+            "rag = rag_open_source.main.dashboard:main"
         ]
     }
 )

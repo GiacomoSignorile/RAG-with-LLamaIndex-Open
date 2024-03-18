@@ -6,9 +6,18 @@ import numpy as np
 import pandas as pd
 import fitz
 from .extract_layout import ExtractLayout
-import re
+import os
+import logging 
 
 
+log_directory = "./log"
+log_filename = "application.log"
+
+
+logging.basicConfig(filename=os.path.join(log_directory, log_filename),
+                    filemode='w',  # 'a' to append to an existing file, 'w' to overwrite
+                    level=logging.INFO,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 def is_scanned_pdf(pdf_path):
     with fitz.open(pdf_path) as doc:
@@ -55,9 +64,9 @@ def replace_tables_in_text(pdf_path):
     doc = pdf2image.convert_from_path(pdf_path)
 
     if is_scanned_pdf(pdf_path):
-        print(f"PDF scannerizzato rilevato. Applicazione di OCR a: {pdf_path}")
+        logging.info(f"Scanned PDF detected. Applying OCR to: {pdf_path}")
         apply_ocr_to_pdf(pdf_path)
-        print("OCR completato.")
+        logging.info("OCR completed.")
     
     doc_fitz = fitz.open(pdf_path)
 
@@ -69,7 +78,7 @@ def replace_tables_in_text(pdf_path):
         previous_bottom = 0
         page = doc_fitz[page_num]
         
-        print(page_num+1)
+        logging.info(page_num + 1)
         if detected:
             detected.sort(key=lambda x: x.block.y_1)  # Ordina le tabelle per la coordinata y
 
@@ -87,7 +96,7 @@ def replace_tables_in_text(pdf_path):
                     else:
                         table_text = ''
                 except Exception as e:
-                    print(f"Errore nell'estrazione della tabella: {e}. Procedo con l'estrazione solo del testo.")
+                    logging.error(f"Error extracting table: {e}. Proceeding with text extraction only.")
                     table_text = ''
 
                 top, bottom = new_coordinates[0], new_coordinates[2]
@@ -103,7 +112,7 @@ def replace_tables_in_text(pdf_path):
             accumulated_text += text_after
         else:
             # Nessuna tabella rilevata, usa tutto il testo della pagina
-            print('no tables')
+            logging.info('No tables')
             accumulated_text = processing_text(page.get_text('text'))
 
         

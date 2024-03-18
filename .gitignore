@@ -5,7 +5,11 @@ model
 .env
 build 
 dist
-VectorStore
+vectorstores
+rag_open_source/database
+
+
+
 
 
 

@@ -12,7 +12,7 @@ from langfuse.llama_index import LlamaIndexCallbackHandler
 # construct vector store query
 from llama_index.core.vector_stores import VectorStoreQuery
 from llama_index.core.query_engine import RetrieverQueryEngine
-from rag_open_source import llm_loader
+from llm import llm_loader
 from llama_index.core import PromptTemplate
 import os
 
@@ -65,10 +65,8 @@ class VectorDBRetriever(BaseRetriever):
 
         return nodes_with_scores
     
-def get_query_engine(retriever):
+def get_query_engine(retriever,model_url = None, model_path = None):
 
-    model_url = None
-    model_path = "./model/mistral-Ita-7b-q4_k_m.gguf"
     llm = llm_loader.getLlamaLLM(model_path, model_url)
 
     query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True)

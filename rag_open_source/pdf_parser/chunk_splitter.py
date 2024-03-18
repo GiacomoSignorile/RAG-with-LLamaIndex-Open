@@ -1,6 +1,8 @@
 from llama_index.core import Document
 import os
 import re
+import logging
+
 
 def custom_chunker(text, max_length=1024):
     '''
@@ -57,7 +59,7 @@ def custom_chunker(text, max_length=1024):
 
 
 def get_documents(path='./Docs', max_len=1024):
-    import rag_open_source.pdf_ingestion as pdf_ingestion
+    import pdf_parser.pdf_ingestion as pdf_ingestion
 
     '''
     Loads PDF documents into chunks, splits them, and returns a structure containing a list
@@ -71,14 +73,14 @@ def get_documents(path='./Docs', max_len=1024):
 
     for pdf_file in pdf_files:
         full_path = os.path.join(folder_path, pdf_file)
-        print(pdf_file)
+        logging.info(pdf_file)
         texts, md_tables = pdf_ingestion.replace_tables_in_text(full_path)
         
         for text in texts:
             chunk_splitted = custom_chunker(text, max_length=max_len)
-            print(len(chunk_splitted))
+            logging.info(len(chunk_splitted))
             if len(chunk_splitted) > 1:
-                print(f'length : {len(chunk_splitted[0])} text splitted : {chunk_splitted}')
+                logging.info(f'length : {len(chunk_splitted[0])} text splitted : {chunk_splitted}')
             
             for chunk in chunk_splitted:
                 documents.append(Document(text=chunk, metadata={'source': pdf_file}))
