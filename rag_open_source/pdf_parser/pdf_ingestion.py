@@ -10,7 +10,7 @@ import os
 import logging 
 
 
-log_directory = "./Log"
+log_directory = "./log"
 log_filename = "application.log"
 
 

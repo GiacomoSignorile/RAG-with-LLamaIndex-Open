@@ -22,7 +22,7 @@ def setupAstradb(embedding_dim, collection_name, ASTRA_TOKEN, ASTRA_API_ENDPOINT
         logging.error(f"Error initializing AstraDB Vector Store: {e}")
         return None
 
-def setupChromaDB(nodes=None, path="./VectorStore", name="default_collection"):
+def setupChromaDB(nodes=None, path="./database", name="default_collection"):
     try:
         chroma_client = chromadb.PersistentClient(path)
         chroma_collection = chroma_client.get_or_create_collection(name)

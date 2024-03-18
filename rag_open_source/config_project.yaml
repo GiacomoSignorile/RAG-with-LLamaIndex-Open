@@ -1,17 +1,21 @@
 custom_splitter:
   path:
-  - '/home/giac/RAG-with-LLamaIndex-Open/testdoc'
+  - '/home/giacomo/Documenti/GitHub/RAG-with-LLamaIndex-Open/testdoc'
   chunk_size: 1024
 
 pdf_ingestion:
   path: 
-  - '/home/giac/RAG-with-LLamaIndex-Open/testdoc'
+  - '/home/giacomo/Documenti/GitHub/RAG-with-LLamaIndex-Open/testdoc'
 
 embeddings:
   name: 
   - "nickprock/sentence-bert-base-italian-uncased"
   - "intfloat/multilingual-e5-large-instruct"
   max_length: 512
+
+llm:
+  path:
+  - "/home/giacomo/Documenti/GitHub/RAG-with-LLamaIndex-Open/rag_open_source/model/mistral-Ita-7b-q5_k_m.gguf"
 
 similarity_metrics:
   - cosine
@@ -36,7 +40,7 @@ filters:
 
 vector_store:
   path:
-  -  "./VectorStore"
+  -  "./database"
   name:
   -  "test1_collection" 
   -  "multilingual_test_collection"

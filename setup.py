@@ -10,7 +10,7 @@ setup(
     package_dir={'': 'rag_open_source'},
     entry_points={
         "console_scripts": [
-            "llm_demo = llm_demo.main.dashboard:main"
+            "rag = rag_open_source.main.dashboard:main"
         ]
     }
 )

@@ -22,7 +22,7 @@ llama-index-vector-stores-chroma
 llama-index-vector-stores-astra_db
 llama-index-vector-stores-mongodb
 llama-index-callbacks-langfuse
-llama-index-llms-llama_cpp
+llama-index-llms-llama-cpp
 pinecone-client
 llama-parse
 bitsandbytes
@@ -30,4 +30,7 @@ llama-cpp-python
 transformers
 scikit-learn
 chromadb
+setuptools
 wheel
+jpype1
+ocrmypdf
