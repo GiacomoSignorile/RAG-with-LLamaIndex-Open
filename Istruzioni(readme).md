@@ -2,6 +2,6 @@
 
 0. Versione Python consigliata: 3.10.12
 0.1 sudo apt install build-essential prima dei requirements
-1. Installare tutto l'ambiente virutale eseguendo install.bat
-2. scaricare in una cartella models il modello rcnn di TableRecognition da qui: [https://github.com/Layout-Parser/layout-parser/blob/main/src/layoutparser/models/detectron2/catalog.py](https://www.dropbox.com/s/6vzfk8lk9xvyitg/model_final.pth?dl=1) preso dal model catalog presente su : https://github.com/Layout-Parser/layout-parser/blob/main/src/layoutparser/models/detectron2/catalog.py
-3. Aprire il notebook
+1. Installare tutto l'ambiente virtuale eseguendo install.sh
+2. scaricare in una cartella models il modello llm scelto: consigliato: https://huggingface.co/DeepMount00/Mistral-Ita-7b-GGUF/blob/main/mistal-Ita-7b-q5_k_m.gguf
+3. Cambiare il path nella config.yaml a seconda del percorso
