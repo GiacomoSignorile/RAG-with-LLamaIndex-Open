@@ -30,7 +30,10 @@ def custom_chunker(text, max_length=1024, remove_table_tags = True, table_descr_
                 text_chunks.append(current_chunk.strip()) 
                 current_chunk = part + " "
         
-        table_description
+        if table_descr_end == True:
+            end = end + 20
+        else:
+            start = start - 20
         
         table_text = text[start:end]
         if len(current_chunk) + len(table_text) <= max_length:
