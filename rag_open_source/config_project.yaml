@@ -7,6 +7,7 @@ pdf_ingestion:
   path: 
   - '/home/giacomo/Documenti/GitHub/RAG-with-LLamaIndex-Open/testdoc'
 
+
 embeddings:
   name: 
   - "nickprock/sentence-bert-base-italian-uncased"
@@ -44,3 +45,9 @@ vector_store:
   name:
   -  "test1_collection" 
   -  "multilingual_test_collection"
+  filter_meta:
+    chiave:
+      fatturato : 
+        - 100000
+        - 200000
+        - 300000

@@ -11,8 +11,10 @@ def main(config_path):
 
     embed_model = embeddings.getEmbeddingModel(config['embeddings']['name'][1])
 
-    nodes = embeddings.createEmbeddings(documents, embed_model)
+    #nodes = embeddings.createEmbeddings(documents, embed_model)
 
+    nodes = getattr(embeddings, 'createEmbeddings')(documents, embed_model)
+    
     vector_store = vector_stores.setupChromaDB(nodes, config['vector_store']['path'][0], 
                                                config['vector_store']['name'][1])
 
@@ -20,7 +22,7 @@ def main(config_path):
                                                                embed_model=embed_model, 
                                                                similarity_top_k=3)    
         
-    query_engine = retriever.get_query_engine(vector_db_retriever_instance, model_path=config['llm']['path'][0])
+    query_engine = retriever.get_query_engine(vector_db_retriever_instance,model_url= "https://huggingface.co/second-state/Gemma-7b-it-GGUF/resolve/main/gemma-7b-it-Q4_K_M.gguf?download=true", model_path=None)
 
     query_str= input("Inserisci la tua domanda:")
 

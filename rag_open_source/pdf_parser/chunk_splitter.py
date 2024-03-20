@@ -4,7 +4,7 @@ import re
 import logging
 
 
-def custom_chunker(text, max_length=1024):
+def custom_chunker(text, max_length=1024, remove_table_tags = True, table_descr_end = True):
     '''
     Spezza il chunk in più chunk in base alla max_length e alla presenza di tabelle
 
@@ -30,6 +30,7 @@ def custom_chunker(text, max_length=1024):
                 text_chunks.append(current_chunk.strip()) 
                 current_chunk = part + " "
         
+        table_description
         
         table_text = text[start:end]
         if len(current_chunk) + len(table_text) <= max_length:
@@ -53,6 +54,11 @@ def custom_chunker(text, max_length=1024):
     
     if current_chunk:  
         text_chunks.append(current_chunk.strip())  
+
+    if remove_table_tags:
+        text_chunks = [re.sub(r'<(\/)?start_table\d+>', '', chunk) for chunk in text_chunks]
+        text_chunks = [re.sub(r'<(\/)?end_table\d+>', '', chunk) for chunk in text_chunks]
+
     
     return text_chunks
 
