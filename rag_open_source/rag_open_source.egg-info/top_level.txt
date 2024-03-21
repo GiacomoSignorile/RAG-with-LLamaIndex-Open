@@ -1,3 +1,0 @@
-llm
-pdf_parser
-retrieval

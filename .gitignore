@@ -6,7 +6,7 @@ model
 build 
 dist
 vectorstores
-rag_open_source/database
+src/database
 
 
 
