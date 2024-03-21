@@ -1,3 +1,0 @@
-[console_scripts]
-llm_demo = llm_demo.main.dashboard:main
-
