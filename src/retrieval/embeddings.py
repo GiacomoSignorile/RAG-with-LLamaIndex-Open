@@ -29,7 +29,7 @@ def createNodes(documents):
     #     # src_doc = documents[doc_idxs[idx]]
     #     # node.metadata = src_doc.metadata
     #     nodes.append(node)
-    node_parser = MarkdownElementNodeParser()
+    node_parser = MarkdownElementNodeParser(verbose=False)
     nodes = node_parser.get_nodes_from_documents(documents)
 
     return nodes
