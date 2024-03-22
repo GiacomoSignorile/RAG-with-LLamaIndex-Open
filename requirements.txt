@@ -34,3 +34,4 @@ setuptools
 wheel
 jpype1
 ocrmypdf
+seaborn

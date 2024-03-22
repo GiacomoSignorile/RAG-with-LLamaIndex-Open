@@ -9,11 +9,20 @@ from dotenv import load_dotenv
 from llama_index.core import Settings
 from llama_index.core.callbacks import CallbackManager
 from langfuse.llama_index import LlamaIndexCallbackHandler
-# construct vector store query
+from llama_index.core import (
+    Settings,
+    SimpleDirectoryReader,
+    ServiceContext,
+    StorageContext,
+    VectorStoreIndex,
+)
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.vector_stores import VectorStoreQuery
 from llama_index.core.query_engine import RetrieverQueryEngine
 from llm import llm_loader
 from llama_index.core import PromptTemplate
+from llama_index.postprocessor.flag_embedding_reranker import FlagEmbeddingReranker
 import os
 
 
@@ -67,9 +76,15 @@ class VectorDBRetriever(BaseRetriever):
     
 def get_query_engine(retriever,model_url = None, model_path = None):
 
+
+    reranker = FlagEmbeddingReranker(
+        top_n=3,
+        model="BAAI/bge-reranker-large",
+    )
+
     llm = llm_loader.getLlamaLLM(model_path, model_url)
 
-    query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True)
+    query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True, node_postprocessors=[reranker])
     
     return query_engine
 
@@ -99,6 +114,4 @@ def get_response_italian(query_str, query_engine):
     langfuse_callback_handler.flush()
 
     return response
-
-
 
