@@ -8,6 +8,11 @@ import fitz
 from .extract_layout import ExtractLayout
 import os
 import logging 
+from img2table.document import Image
+from img2table.ocr import TesseractOCR, PaddleOCR
+import matplotlib.pyplot as plt
+from PIL import Image as PILImage
+
 
 
 log_directory = "./log"
@@ -39,6 +44,16 @@ def processing_text(text):
     text = ' '.join(listText)
     return text
 
+def extraction_table_ocr(img):
+    ocr = PaddleOCR(lang='it')
+    doc = Image(img)
+    # Table extraction
+    extracted_table= doc.extract_tables(ocr=ocr, implicit_rows=True, borderless_tables=True, min_confidence=50)
+    ocrTableMD = extracted_table.df.to_markdown(index=False)
+    #ocrTableMD = processing_text(ocrTableMD)
+
+    return ocrTableMD
+
 
 def apply_ocr_to_pdf(pdf_path, output_path=None):
     """
@@ -59,19 +74,22 @@ def replace_tables_in_text(pdf_path):
     )
 
     md_tables = []
+    md_tables_ocr = []
     text_chunks = []
     
-    doc = pdf2image.convert_from_path(pdf_path)
 
     if is_scanned_pdf(pdf_path):
         logging.info(f"Scanned PDF detected. Applying OCR to: {pdf_path}")
         apply_ocr_to_pdf(pdf_path)
         logging.info("OCR completed.")
     
+    doc = pdf2image.convert_from_path(pdf_path)
+
     doc_fitz = fitz.open(pdf_path)
 
     for page_num, document in enumerate(doc_fitz):
         img = np.asarray(doc[page_num])
+        img_pil = PILImage.fromarray(img)
         detected = model.detect(img)
 
         accumulated_text = ""
@@ -85,6 +103,15 @@ def replace_tables_in_text(pdf_path):
             for i, table in enumerate(detected):
                 new_coordinates = scale_xy(table)
                 area = [new_coordinates[0], new_coordinates[1], new_coordinates[2], new_coordinates[3]]
+                # Utilizza le coordinate rilevate dal modello per estrarre l'area corretta dall'immagine
+                x1, y1, x2, y2 = int(table.block.x_1 - 15), int(), int(table.block.x_2 + 15), int(table.block.y_2 + 5)
+                #table_img = imgpng[y1:y2, x1:x2]table.block.y_1 - 5
+                table_img = img_pil.crop((table.block.x_1 - 15, table.block.y_1 - 5, table.block.x_2 + 15, table.block.y_2 + 5))
+                # Visualizza l'immagine ritagliata utilizzando matplotlib
+                plt.imshow(table_img)
+                plt.axis('off')  # Nasconde gli assi
+                plt.show()
+                #table_img = img[int(table.block.x_1):int(table.block.y_1), int(table.block.x_1):int(table.block.y_2)]
                 try:
                     tables = tabula.read_pdf(pdf_path, pages=page_num + 1, area=area, multiple_tables=False)
                     if tables:
@@ -92,6 +119,9 @@ def replace_tables_in_text(pdf_path):
                         md_table = md_table.to_markdown(index=False)
                         md_tables.append(md_table)
                         md_table = processing_text(md_table)
+                        md_table_ocr = extraction_table_ocr(table_img)
+                        
+                        md_tables_ocr.append(md_table_ocr)
                         table_text = f' <start_table{i+1}>' + md_table + f' <end_table{i+1}>'
                     else:
                         table_text = ''
@@ -118,4 +148,4 @@ def replace_tables_in_text(pdf_path):
         
         text_chunks.append(accumulated_text)
 
-    return text_chunks,md_tables
+    return text_chunks,md_tables,md_tables_ocr
