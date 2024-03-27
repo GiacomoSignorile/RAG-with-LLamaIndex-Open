@@ -108,7 +108,7 @@ def apply_ocr_to_pdf(pdf_path, output_path=None):
     subprocess.run(['ocrmypdf', pdf_path, output_path], check=True)
 
 
-def replace_tables_in_text(pdf_path):
+def replace_tables_in_text(pdf_path, use_ocr_table = False):
     
     model =  ExtractLayout(
         config_path='lp://TableBank/faster_rcnn_R_101_FPN_3x/config',
@@ -155,10 +155,10 @@ def replace_tables_in_text(pdf_path):
                 
                 fitz_table_text = page.get_text("text", clip=rect_table)
                 
-                print(fitz_table_text)
-                plt.imshow(table_img)
-                plt.axis('off')  
-                plt.show()
+                logging.info(fitz_table_text)
+                # plt.imshow(table_img)
+                # plt.axis('off')  
+                # plt.show()
                 
                 try:
                     tables = tabula.read_pdf(pdf_path, pages=page_num + 1, area=area, multiple_tables=False)
@@ -168,10 +168,21 @@ def replace_tables_in_text(pdf_path):
                         md_table = md_table.to_markdown(index=False, tablefmt = "github")
                         #md_tables.append(md_table)
                         md_table = processing_text(md_table)
-                        md_table_ocr = extraction_table_ocr(table_img)
-                        
-                        md_tables_ocr.append(md_table_ocr)
-                        table_text = f' <start_table{i+1}>' + md_table + f' <end_table{i+1}>'
+                        # md_table_ocr = extraction_table_ocr(table_img)
+
+                        # md_tables_ocr.append(md_table_ocr)
+
+                        if use_ocr_table == True:
+
+                            md_table_ocr = extraction_table_ocr(table_img)
+                            md_tables_ocr.append(md_table_ocr)
+                            md_table_ocr = md_table_ocr.to_markdown(index=False, tablefmt = "github")
+                            # md_tables.append(md_table)
+                            md_table_ocr = processing_text(md_table_ocr)
+                            
+                            table_text = f' <start_table{i+1}>' + md_table_ocr + f' <end_table{i+1}>'
+                        else:
+                            table_text = f' <start_table{i+1}>' + md_table + f' <end_table{i+1}>'
                     else:
                         table_text = ''
                 except Exception as e:
@@ -197,4 +208,4 @@ def replace_tables_in_text(pdf_path):
         
         text_chunks.append(accumulated_text)
 
-    return text_chunks,md_tables,md_tables_ocr
+    return text_chunks,md_tables
