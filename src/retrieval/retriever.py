@@ -84,8 +84,8 @@ def get_query_engine(retriever,model_url = None, model_path = None):
 
     llm = llm_loader.getLlamaLLM(model_path, model_url)
 
-    query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True, node_postprocessors=[reranker])
-    #query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True)
+    #query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True, node_postprocessors=[reranker])
+    query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True)
 
     return query_engine
 

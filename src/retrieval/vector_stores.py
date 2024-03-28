@@ -26,7 +26,7 @@ def choose_vector_store(store_name, *args, **kwargs):
         Instance of the chosen vector store.
     """
     if store_name == "AstraDB":
-        if  "collection_name" in kwargs:
+        if  "collection_name" in args:
             return setupAstradb(*args, **kwargs)
         else:
             logging.error("Missing required arguments for AstraDB Vector Store setup.")

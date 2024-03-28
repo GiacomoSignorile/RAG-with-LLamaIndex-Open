@@ -17,7 +17,7 @@ import tempfile
 
 
 
-log_directory = "./log"
+log_directory = "./src/log"
 log_filename = "application.log"
 
 
