@@ -26,7 +26,7 @@ def choose_vector_store(store_name, *args, **kwargs):
         Instance of the chosen vector store.
     """
     if store_name == "AstraDB":
-        if "embedding_dim" in kwargs and "collection_name" in kwargs and "ASTRA_TOKEN" in kwargs and "ASTRA_API_ENDPOINT" in kwargs and "ASTRA_NAMESPACE" in kwargs:
+        if  "collection_name" in kwargs:
             return setupAstradb(*args, **kwargs)
         else:
             logging.error("Missing required arguments for AstraDB Vector Store setup.")
@@ -43,17 +43,12 @@ def choose_vector_store(store_name, *args, **kwargs):
         else:
             logging.error("Missing required arguments for Pinecone Vector Store setup.")
             return None
-    elif store_name == "MongoDB":
-        # Uncomment and adjust this block as necessary
-        # return setupMondoDB()
-        logging.error("MongoDB Vector Store setup is not implemented yet.")
-        return None
     else:
         logging.error("Unknown vector store name.")
         return None
 
 
-def setupAstradb(nodes, embeddings_dim, collection_name):
+def setupAstradb(collection_name, nodes = None, embeddings_dim = 1024):
     try:
         ASTRA_TOKEN = os.getenv("ASTRA_TOKEN")
         ASTRA_API_ENDPOINT = os.getenv("ASTRA_API_ENDPOINT")

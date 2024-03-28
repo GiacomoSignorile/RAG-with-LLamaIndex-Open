@@ -20,13 +20,13 @@ from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.vector_stores import VectorStoreQuery
 from llama_index.core.query_engine import RetrieverQueryEngine
-from llm import llm_loader
+from src.llm import llm_loader
 from llama_index.core import PromptTemplate
 from llama_index.postprocessor.flag_embedding_reranker import FlagEmbeddingReranker
 import os
 
 
-load_dotenv('.env')
+load_dotenv('./src/.env')
 
 langfuse_callback_handler = LlamaIndexCallbackHandler(
     public_key=os.environ.get("LANGFUSE_PUBLIC_KEY"),
@@ -77,15 +77,16 @@ class VectorDBRetriever(BaseRetriever):
 def get_query_engine(retriever,model_url = None, model_path = None):
 
 
-    reranker = FlagEmbeddingReranker(
-        top_n=3,
-        model="BAAI/bge-reranker-large",
-    )
+    #reranker = FlagEmbeddingReranker(
+    #    top_n=3,
+    #    model="BAAI/bge-reranker-large",
+    #)
 
     llm = llm_loader.getLlamaLLM(model_path, model_url)
 
     query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True, node_postprocessors=[reranker])
-    
+    #query_engine = RetrieverQueryEngine.from_args(retriever, llm=llm, streaming=True)
+
     return query_engine
 
 def get_response_italian(query_str, query_engine):

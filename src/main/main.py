@@ -14,10 +14,12 @@ def main(config_path):
     nodes = embeddings.createEmbeddings(documents, embed_model)
 
     #nodes = getattr(embeddings, 'createEmbeddings')(documents, embed_model)
-    #embeddings_dimensiom = len(nodes[0].embedding)
+    embeddings_dimensiom = len(nodes[0].embedding)
     
-    vector_store = vector_stores.setupChromaDB(nodes, config['vector_store']['path'][0], 
-                                               config['vector_store']['name'][1])
+    #vector_store = vector_stores.setupChromaDB(nodes, config['vector_store']['path'][0], 
+    #                                           config['vector_store']['name'][1])
+
+    vector_store = vector_stores.choose_vector_store(store_name = 'AstraDB', nodes = nodes, embedding_dim = embeddings_dimensiom, collection_name = 'prova')
 
     vector_db_retriever_instance = retriever.VectorDBRetriever(vector_store=vector_store, 
                                                                embed_model=embed_model, 

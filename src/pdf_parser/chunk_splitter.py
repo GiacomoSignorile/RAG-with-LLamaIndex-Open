@@ -67,7 +67,7 @@ def custom_chunker(text, max_length=1024, chunk_overlap=0, remove_table_tags=Tru
 
 
 def get_documents(path='./Docs', max_len=1024):
-    import pdf_parser.pdf_ingestion as pdf_ingestion
+    import src.pdf_parser.pdf_ingestion as pdf_ingestion
 
     '''
     Loads PDF documents into chunks, splits them, and returns a structure containing a list
