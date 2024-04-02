@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 load_dotenv('.env')
 
-def choose_vector_store(store_name, *args, **kwargs):
+def choose_vector_store(store_name, nodes = None, *args, **kwargs):
     """
     Choose and setup a vector store based on the given store name.
     
@@ -26,11 +26,8 @@ def choose_vector_store(store_name, *args, **kwargs):
         Instance of the chosen vector store.
     """
     if store_name == "AstraDB":
-        if  "collection_name" in args:
-            return setupAstradb(*args, **kwargs)
-        else:
-            logging.error("Missing required arguments for AstraDB Vector Store setup.")
-            return None
+        setupAstradb(*args, nodes, **kwargs)
+        
     elif store_name == "ChromaDB":
         if "nodes" in kwargs and "path" in kwargs and "name" in kwargs:
             return setupChromaDB(*args, **kwargs)

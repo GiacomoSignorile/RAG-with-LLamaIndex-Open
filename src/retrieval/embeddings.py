@@ -1,7 +1,7 @@
 # sentence transformers
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core.schema import TextNode
-from llama_index.core.node_parser import MarkdownElementNodeParser
+from llama_index.core.node_parser import MarkdownElementNodeParser,MarkdownNodeParser
 import nest_asyncio
 nest_asyncio.apply()
 
@@ -29,7 +29,7 @@ def createNodes(documents):
     #     # src_doc = documents[doc_idxs[idx]]
     #     # node.metadata = src_doc.metadata
     #     nodes.append(node)
-    node_parser = MarkdownElementNodeParser(verbose=False)
+    node_parser = MarkdownNodeParser(verbose=False)
     nodes = node_parser.get_nodes_from_documents(documents)
 
     return nodes
