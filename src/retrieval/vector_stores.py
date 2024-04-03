@@ -26,14 +26,10 @@ def choose_vector_store(store_name, nodes = None, *args, **kwargs):
         Instance of the chosen vector store.
     """
     if store_name == "AstraDB":
-        setupAstradb(*args, nodes, **kwargs)
+        setupAstradb(*args, nodes = nodes, **kwargs)
         
     elif store_name == "ChromaDB":
-        if "nodes" in kwargs and "path" in kwargs and "name" in kwargs:
-            return setupChromaDB(*args, **kwargs)
-        else:
-            logging.error("Missing required arguments for ChromaDB Vector Store setup.")
-            return None
+        return setupChromaDB(*args, nodes=nodes, **kwargs)
     elif store_name == "Pinecone":
         if "api_key" in kwargs and "name" in kwargs:
             return setupPinecone(*args, **kwargs)

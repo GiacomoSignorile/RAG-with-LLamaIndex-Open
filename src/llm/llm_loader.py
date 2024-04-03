@@ -11,10 +11,10 @@ def getLlamaLLM(model_path,model_url, temperature=0.1):
     # llama2 has a context window of 4096 tokens, but we set it lower to allow for some wiggle room
     context_window=3900,
     # kwargs to pass to __call__()
-    generate_kwargs={},
+    generate_kwargs={"top_k": 50, "top_p": 0.95},
     # kwargs to pass to __init__()
     # set to at least 1 to use GPU
-    model_kwargs={"n_gpu_layers": 1},
+    model_kwargs={"n_gpu_layers": 10},
     verbose=True,
     )
 
