@@ -1,3 +1,0 @@
-[console_scripts]
-start_rag = rag_open_source.main.main:main
-
