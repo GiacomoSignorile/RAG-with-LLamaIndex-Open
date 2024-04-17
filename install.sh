@@ -10,8 +10,8 @@ pip install -r requirements.txt
 sudo apt-get install python3-dev
 python3.10 -m pip install -U 'git+https://github.com/facebookresearch/detectron2.git@ff53992b1985b63bd3262b5a36167098e3dada02'
 pip install git+https://github.com/FlagOpen/FlagEmbedding.git
-rm -rf build/ dist/ src/src.egg-info/
+rm -rf build/ dist/ src/rag_open_source.egg-info/
+python3.10 src/rag_open_source/setup.py bdist_wheel
 cd dist
 pip install "$(ls)" --force-reinstall
-python3.10 src/rag_open_source/setup.py bdist_wheel
 start_rag

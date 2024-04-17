@@ -7,6 +7,8 @@ build
 dist
 vectorstores
 src/database
+src/rag_open_source.egg-info
+
 
 
 
