@@ -20,7 +20,7 @@ from llama_index.core.node_parser import SentenceSplitter
 from llama_index.core.retrievers import VectorIndexRetriever
 from llama_index.core.vector_stores import VectorStoreQuery
 from llama_index.core.query_engine import RetrieverQueryEngine
-from src.llm import llm_loader
+from rag_open_source.llm import llm_loader
 from llama_index.core import PromptTemplate
 from llama_index.postprocessor.flag_embedding_reranker import FlagEmbeddingReranker
 import os
