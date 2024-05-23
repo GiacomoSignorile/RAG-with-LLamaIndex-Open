@@ -3,7 +3,7 @@ from rag_open_source.pdf_parser import chunk_splitter, extract_layout, pdf_inges
 from rag_open_source.retrieval import embeddings, retriever,vector_stores
 
 def main():
-    
+
     config_path = './config_project.yaml'
 
     with open(config_path, 'r') as file:
