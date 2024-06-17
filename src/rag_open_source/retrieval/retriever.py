@@ -5,7 +5,7 @@ from llama_index.core.vector_stores import VectorStoreQuery
 from llama_index.core.schema import NodeWithScore
 from typing import Optional
 from llama_index.vector_stores.chroma import ChromaVectorStore
-from dotenv import load_dotenv
+from dotenv import load_dotenv,find_dotenv
 from llama_index.core import Settings
 from llama_index.core.callbacks import CallbackManager
 from langfuse.llama_index import LlamaIndexCallbackHandler
@@ -24,9 +24,8 @@ from rag_open_source.llm import llm_loader
 from llama_index.core import PromptTemplate
 from llama_index.postprocessor.flag_embedding_reranker import FlagEmbeddingReranker
 import os
-
-
-load_dotenv('./src/.env')
+found_dotenv = find_dotenv()
+load_dotenv(found_dotenv)
 
 langfuse_callback_handler = LlamaIndexCallbackHandler(
     public_key=os.environ.get("LANGFUSE_PUBLIC_KEY"),
